@@ -1,0 +1,57 @@
+info:
+  app:
+    name: openapi-basic-trace
+    version: 1.0.0
+    description:  openapi-basic-trace
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health,prometheus
+
+spring:
+  profiles:
+    active: prod
+---
+spring:
+  profile: prod
+  pid:
+    file: /data/openapi-trace/openapi-basic/run/openapi-basic.pid
+  application:
+    name: openapi-basic
+logging:
+  config: file:/data/openapi-trace/openapi-basic/logback-prod.xml
+log:
+  file:
+    path: "/data/openapi-trace/openapi-basic/logs"
+
+auth:
+  appVersion: 1.0.0
+  authServer: "http://10.10.50.112:8081/v1/auth/basic/validate"
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 8083
+  tomcat:
+    accesslog:
+      rotate: true
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/data/openapi-trace/openapi-basic"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true

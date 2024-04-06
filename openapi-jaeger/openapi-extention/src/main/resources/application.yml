@@ -1,0 +1,148 @@
+info:
+  app:
+    name: openapi-extention
+    version: 1.0.0
+    description:  openapi-extention
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health,prometheus
+    
+spring:
+  profiles:
+    active: prod
+---
+spring:
+  profile: prod
+  pid:
+    file: /openapi-extention/run/openapi-extention.pid
+  application:
+    name: openapi-extention
+
+auth:
+  authServer: "http://${AUTH_SERVER}:${AUTH_PORT}/v2/auth/extention/validate"
+  appVersion: ${APPLICATION_VERSION}
+  
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+logging:
+  config: classpath:logback-prod.xml
+log:
+  file:
+    path: "/openapi-extention/logs"
+server:
+  port: 8080
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/openapi-extention"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+opentracing:
+  jaeger:
+    service-name: openapi-basic
+    udp-sender:
+      host: ${JAEGER_AGENT_SERVER}
+      port: ${JAEGER_AGENT_PORT}
+---
+spring:
+  profile: local
+  pid:
+    file: C://dev/work/openapi-extention/run/openapi-extention.pid
+  application:
+    name: openapi-extention
+logging:
+  config: classpath:logback-local.xml
+log:
+  file:
+    path: "C://dev/work/openapi-extention/logs"
+
+auth:
+  authServer: "http://10.10.50.2:28080/v2/auth/extention/validate"
+  appVersion: 1.0.0
+
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 8080
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "C://dev/work/openapi-extention"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+opentracing:
+  jaeger:
+    service-name: openapi-extention
+    udp-sender:
+      host: 10.10.50.2
+      port: 6831
+---
+spring:
+  profile: mac
+  pid:
+    file: /tmp/openapi-extention/run/openapi-extention.pid
+  application:
+    name: openapi-extention
+logging:
+  config: classpath:logback-mac.xml
+log:
+  file:
+    path: "/tmp/openapi-extention/logs"
+
+auth:
+  authServer: "http://10.10.50.2:28082/v2/auth/extention/validate"
+  appVersion: 1.0.0
+
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 28081
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/tmp/openapi-extention"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+opentracing:
+  jaeger:
+    service-name: openapi-extention
+    udp-sender:
+      host: 10.10.50.2
+      port: 6831     

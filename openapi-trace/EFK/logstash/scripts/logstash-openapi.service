@@ -1,0 +1,13 @@
+Description=logstash-openapi
+After=network-online.target
+
+[Service]
+User=wbl
+Group=wbl
+Environment="LOGSTASH_HOME=/opt/logstash"
+ExecStart=/opt/logstash/bin/logstash -r -f /opt/logstash/config/logstash-trace.conf
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

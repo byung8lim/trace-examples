@@ -1,0 +1,199 @@
+info:
+  app:
+    name: openapi-gateway
+    version: 0.0.1
+    description:  openapi-gateway
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health,prometheus
+    
+spring:
+  profiles:
+    active: prod
+---
+spring:
+  profile: prod
+  pid:
+    file: /openapi-gateway/run/openapi-gateway.pid
+  application:
+    name: openapi-gateway
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+      - id: auth-basic
+        uri: http://${AUTH_SERVER}:${AUTH_PORT}/v1/auth/basic
+        predicates:
+        - Path=/v1/auth/basic/**
+      - id: auth-extention
+        uri: http://${AUTH_SERVER}:${AUTH_PORT}/v2/auth/extention
+        predicates:
+        - Path=/v2/auth/extention/**
+      - id: api-public
+        uri: http://${PUB_API_SERVER}:${PUB_API_PORT}/v1/openapi/pub
+        predicates:
+        - Path=/v1/openapi/pub/**
+      - id: api-basic
+        uri: http://${BASIC_API_SERVER}:${BASIC_API_PORT}/v1/openapi/basic
+        predicates:
+        - Path=/v1/openapi/basic/**
+      - id: api-extention
+        uri: http://${EXTENTION_API_SERVER}:${EXTENTION_API_PORT}/v2/openapi/extention
+        predicates:
+        - Path=/v2/openapi/extention/**
+logging:
+  config: classpath:logback-prod.xml
+log:
+  file:
+    path: "/data/openapi-gateway/logs"
+
+auth:
+  appVersion: 1.0.0
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 8080
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/openapi-gateway"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+---
+spring:
+  profile: local
+  pid:
+    file: C://dev/work/openapi-gateway/run/openapi-gateway.pid
+  application:
+    name: openapi-gateway
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+      - id: auth-basic
+        uri: http://10.10.50.2:28082/v1/auth/basic
+        predicates:
+        - Path=/v1/auth/basic/**
+      - id: auth-extention
+        uri: http://10.10.50.2:28082/v2/auth/extention
+        predicates:
+        - Path=/v2/auth/extention/**
+      - id: api-public
+        uri: http://10.10.50.2:28083/v1/openapi/pub
+        predicates:
+        - Path=/v1/openapi/pub/**
+      - id: api-basic
+        uri: http://10.10.50.2:28084/v1/openapi/basic
+        predicates:
+        - Path=/v1/openapi/basic/**
+      - id: api-extention
+        uri: http://10.10.50.2:28085/v2/openapi/extention
+        predicates:
+        - Path=/v2/openapi/extention/**
+logging:
+  config: classpath:logback-local.xml
+log:
+  file:
+    path: "C://dev/work/openapi-gateway/logs"
+
+auth:
+  appVersion: 1.0.0
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 28081
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "C://dev/work/openapi-gateway"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+---
+spring:
+  profile: mac
+  pid:
+    file: /tmp/openapi-gateway/run/openapi-gateway.pid
+  application:
+    name: openapi-gateway
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+      - id: auth-basic
+        uri: http://10.10.50.2:28082/v1/auth/basic
+        predicates:
+        - Path=/v1/auth/basic/**
+      - id: auth-extention
+        uri: http://10.10.50.2:28082/v2/auth/extention
+        predicates:
+        - Path=/v2/auth/extention/**
+      - id: api-public
+        uri: http://10.10.50.2:28083/v1/openapi/pub
+        predicates:
+        - Path=/v1/openapi/pub/**
+      - id: api-basic
+        uri: http://10.10.50.2:28084/v1/openapi/basic
+        predicates:
+        - Path=/v1/openapi/basic/**
+      - id: api-extention
+        uri: http://10.10.50.2:28085/v2/openapi/extention
+        predicates:
+        - Path=/v2/openapi/extention/**
+logging:
+  config: classpath:logback-mac.xml
+log:
+  file:
+    path: "/tmp/openapi-gateway/logs"
+
+auth:
+  appVersion: 1.0.0
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 28081
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/tmp/openapi-gateway"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true

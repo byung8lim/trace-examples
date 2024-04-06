@@ -1,0 +1,15 @@
+[Unit]
+Description=auth-trace
+After=network.target
+
+[Service]
+Type=simple
+User=wbl
+Group=wbl
+SyslogIdentifier=auth-trace
+Restart=on-failure
+Environment=JAVA_HOME=/opt/openjdk-11.0.22
+ExecStart=/opt/openjdk-11.0.22/bin/java -jar -Dspring.config.location=file:/data/openapi-trace/auth/application.yml /data/openapi-trace/auth/auth-0.0.1.jar
+
+[Install]
+WantedBy=multi-user.target

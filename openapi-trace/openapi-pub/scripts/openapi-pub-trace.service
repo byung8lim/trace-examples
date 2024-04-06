@@ -1,0 +1,15 @@
+[Unit]
+Description=openapi-pub-trace
+After=network.target
+
+[Service]
+Type=simple
+User=wbl
+Group=wbl
+SyslogIdentifier=openapi-pub-trace
+Restart=on-failure
+Environment=JAVA_HOME=/opt/openjdk-11.0.22
+ExecStart=/opt/openjdk-11.0.22/bin/java -Dspring.config.location=file:/data/openapi-trace/openapi-pub/application.yml -jar /data/openapi-trace/openapi-pub/openapi-pub-0.0.1.jar
+
+[Install]
+WantedBy=multi-user.target

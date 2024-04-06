@@ -1,0 +1,130 @@
+info:
+  app:
+    name: openapi-extention
+    version: 1.0.0
+    description:  openapi-extention
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health,prometheus
+    
+spring:
+  profiles:
+    active: prod
+---
+spring:
+  profile: prod
+  pid:
+    file: /openapi-extention/run/openapi-extention.pid
+  application:
+    name: openapi-extention
+
+auth:
+  appVersion: 1.0.0
+  authServer: "http://10.10.50.111:28082/v2/auth/extention/validate"  
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+logging:
+  config: classpath:logback-prod.xml
+log:
+  file:
+    path: "/data/openapi-extention/logs"
+server:
+  port: 28085
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/data/openapi-extention"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true  
+  
+---
+spring:
+  profile: local
+  pid:
+    file: C://dev/work/openapi-extention/run/openapi-extention.pid
+  application:
+    name: openapi-extention
+logging:
+  config: classpath:logback-local.xml
+log:
+  file:
+    path: "C://dev/work/openapi-extention/logs"
+
+auth:
+  appVersion: 1.0.0
+  authServer: "http://10.10.50.2:28082/v2/auth/extention/validate"  
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 28085
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "C://dev/work/openapi-extention"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+---
+spring:
+  profile: mac
+  pid:
+    file: /tmp/openapi-extention/run/openapi-extention.pid
+  application:
+    name: openapi-extention
+logging:
+  config: classpath:logback-mac.xml
+log:
+  file:
+    path: "/tmp/openapi-extention/logs"
+
+auth:
+  appVersion: 1.0.0
+  authServer: "http://10.10.50.2:28082/v2/auth/extention/validate"  
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 28085
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/tmp/openapi-extention"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+      

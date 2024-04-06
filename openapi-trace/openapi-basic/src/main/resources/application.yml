@@ -1,0 +1,125 @@
+info:
+  app:
+    name: openapi-basic
+    version: 1.0.0
+    description:  openapi-basic
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health,prometheus
+    
+spring:
+  profiles:
+    active: local
+---
+spring:
+  profile: prod
+  pid:
+    file: /openapi-basic/run/openapi-basic.pid
+  application:
+    name: openapi-basic
+logging:
+  config: classpath:logback-prod.xml
+log:
+  file:
+    path: "/openapi-basic/logs"
+
+auth:
+  authServer: "http://${AUTH_SERVER}:${AUTH_PORT}/v1/auth/basic/validate"
+  appVersion: ${APPLICATION_VERSION}
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 8080
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/openapi-basic"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+---
+spring:
+  profile: local
+  pid:
+    file: C://dev/work/openapi-basic/run/openapi-basic.pid
+  application:
+    name: openapi-basic
+logging:
+  config: classpath:logback-local.xml
+log:
+  file:
+    path: "C://dev/work/openapi-basic/logs"
+auth:
+  appVersion: 1.0.0
+  authServer: "http://10.10.50.2:28082/v1/auth/basic/validate"  
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 28084
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "C://dev/work/openapi-basic"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+---
+spring:
+  profile: mac
+  pid:
+    file: /tmp/openapi-basic/run/openapi-basic.pid
+  application:
+    name: openapi-basic
+logging:
+  config: classpath:logback-mac.xml
+log:
+  file:
+    path: "/tmp/openapi-basic/logs"
+auth:
+  appVersion: 1.0.0
+  authServer: "http://10.10.50.2:28082/v1/auth/basic/validate"  
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 28084
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/tmp/openapi-basic"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true

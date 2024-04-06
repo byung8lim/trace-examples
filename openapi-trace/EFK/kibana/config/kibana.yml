@@ -1,0 +1,50 @@
+server.port: 5601
+server.host: "0.0.0.0"
+#server.basePath: ""
+#server.rewriteBasePath: false
+#server.publicBaseUrl: ""
+
+#server.maxPayload: 1048576
+#server.name: "your-hostname"
+#server.ssl.enabled: true
+elasticsearch.hosts: ["http://10.10.50.131:9200","http://10.10.50.132:9200","http://10.10.50.133:9200"]
+
+#elasticsearch.username: "kibana_system"
+#elasticsearch.password: "pass"
+# elasticsearch.serviceAccountToken: "my_token"
+
+#elasticsearch.pingTimeout: 1500
+#elasticsearch.requestTimeout: 30000
+#elasticsearch.maxSockets: 1024
+#elasticsearch.compression: false
+#elasticsearch.requestHeadersWhitelist: [ authorization ]
+#elasticsearch.customHeaders: {}
+#elasticsearch.shardTimeout: 30000
+#elasticsearch.ssl.enabled: false
+#elasticsearch.ssl.certificate: /path/to/your/client.crt
+#elasticsearch.ssl.key: /path/to/your/client.key
+#elasticsearch.ssl.certificateAuthorities: [ "/path/to/your/CA.pem" ]
+#elasticsearch.ssl.verificationMode: full
+
+logging.root.level: info
+logging.appenders.default:
+  type: file
+  fileName: /data/efk/kib/logs/kibana.log
+  layout:
+    type: json
+
+logging.loggers:
+  - name: elasticsearch.query
+    level: info
+
+path.data: /data/efk/kib/data
+pid.file: /data/efk/kib/run/kibana.pid
+
+#ops.interval: 5000
+
+i18n.locale: "ko-KR"
+#migrations.batchSize: 1000
+#migrations.maxBatchSizeBytes: 100mb
+#migrations.retryAttempts: 15
+#unifiedSearch.autocomplete.valueSuggestions.timeout: 1000
+#unifiedSearch.autocomplete.valueSuggestions.terminateAfter: 100000

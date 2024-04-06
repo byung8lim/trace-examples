@@ -1,0 +1,128 @@
+info:
+  app:
+    name: auth
+    version: 0.0.1
+    description:  auth
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health,prometheus
+    
+spring:
+  profiles:
+    active: prod
+---
+spring:
+  profile: prod
+  pid:
+    file: /data/openapi-otel/auth/run/auth.pid
+  application:
+    name: auth-server
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  datasource:
+    url: jdbc:h2:file:/data/openapi-otel/auth/db/auth;AUTO_SERVER=true
+    driverClassName: org.h2.Driver
+    username: sa
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.H2Dialect
+      properties:
+        hibernate:
+          format_sql: true
+          show_sql: false
+auth:
+  appVersion: 1.0.0
+  seed: 1234567890123456
+
+logging:
+  config: classpath:logback-prod.xml
+log:
+  file:
+    path: "/data/openapi-otel/auth/logs"
+server:
+  port: 8082
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/data/openapi-otel/auth"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+---
+spring:
+  profile: local
+  pid:
+    file: C://dev/work/auth/run/auth.pid
+  application:
+    name: auth-server
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  datasource:
+    url: jdbc:h2:file:C://dev/work/auth/db/auth;AUTO_SERVER=true
+    driverClassName: org.h2.Driver
+    username: sa
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.H2Dialect
+      properties:
+        hibernate:
+          format_sql: true
+          show_sql: false
+auth:
+  appVersion: 1.0.0
+  seed: 1234567890123456
+
+logging:
+  config: classpath:logback-local.xml
+log:
+  file:
+    path: "C://dev/work/auth/logs"
+server:
+  port: 8082
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/tmp/auth"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  
+      

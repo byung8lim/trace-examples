@@ -1,0 +1,56 @@
+info:
+  app:
+    name: openapi-pub
+    version: 1.0.0
+    description:  openapi-pub
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health,prometheus
+
+spring:
+  profiles:
+    active: prod
+---
+spring:
+  profile: prod
+  pid:
+    file: /data/openapi-trace/openapi-pub/run/openapi-pub.pid
+  application:
+    name: openapi-pub
+logging:
+  config: file:/data/openapi-trace/openapi-pub/logback-prod.xml
+log:
+  file:
+    path: "/data/openapi-trace/openapi-pub/logs"
+
+auth:
+  appVersion: 1.0.0
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 8082
+  tomcat:
+    accesslog:
+      rotate: true
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/data/openapi-trace/openapi-pub"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true

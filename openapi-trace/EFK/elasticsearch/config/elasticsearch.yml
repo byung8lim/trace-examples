@@ -1,0 +1,12 @@
+cluster.name: byung8cluster
+node.name: elk01.lbh.com
+path.data: /data/efk/elk/data
+path.logs: /data/efk/elk/logs
+network.host: 10.10.50.131
+
+http.port: 9200
+xpack.security.enabled: false
+xpack.security.transport.ssl.enabled: false
+
+discovery.seed_hosts: ["10.10.50.131:9300","10.10.50.132:9300","10.10.50.133:9300"]
+cluster.initial_master_nodes: ["10.10.50.131", "10.10.50.132","10.10.50.133"]

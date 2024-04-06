@@ -1,0 +1,23 @@
+[Unit]
+Description=zk
+After=network.target
+
+[Service]
+Type=forking
+User=wbl
+Group=wbl
+SyslogIdentifier=zk
+Restart=on-failure
+Environment=ZK_SERVER_HEAP=64
+RestartSec=0s
+Environment=JAVA_HOME=/opt/jdk
+Environment=ZK_HOME=/opt/zookeeper
+Environment=ZOOCFGDIR=/data/efk/zk/conf
+Environment=ZOO_LOG_DIR=/data/efk/zk/logs
+ExecStart=/opt/zookeeper/bin/zkServer.sh start /data/efk/zk/conf/zoo.cfg
+ExecStop=/opt/zookeeper/bin/zkServer.sh stop /data/efk/zk/conf/zoo.cfg
+ExecReload=/opt/zookeeper/bin/zkServer.sh restart /data/efk/zk/conf/zoo.cfg
+WorkingDirectory=/data/efk/zk/data
+
+[Install]
+WantedBy=multi-user.target

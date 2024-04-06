@@ -1,0 +1,81 @@
+info:
+  app:
+    name: openapi-gateway
+    version: 0.0.1
+    description:  openapi-gateway
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health,prometheus
+
+spring:
+  profiles:
+    active: prod
+---
+spring:
+  profile: prod
+  pid:
+    file: /data/openapi-trace/openapi-gateway/run/openapi-gateway.pid
+  application:
+    name: openapi-gateway
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+      - id: auth-basic
+        uri: http://10.10.50.112:8081/v1/auth/basic
+        predicates:
+        - Path=/v1/auth/basic/**
+      - id: auth-extention
+        uri: http://10.10.50.112:8081/v2/auth/extention
+        predicates:
+        - Path=/v2/auth/extention/**
+      - id: api-public
+        uri: http://10.10.50.112:8082/v1/openapi/pub
+        predicates:
+        - Path=/v1/openapi/pub/**
+      - id: api-basic
+        uri: http://10.10.50.112:8083/v1/openapi/basic
+        predicates:
+        - Path=/v1/openapi/basic/**
+      - id: api-extention
+        uri: http://10.10.50.112:8084/v2/openapi/extention
+        predicates:
+        - Path=/v2/openapi/extention/**
+logging:
+  config: file:/data/openapi-trace/openapi-gateway/logback-prod.xml
+log:
+  file:
+    path: "/data/openapi-trace/openapi-gateway/logs"
+
+auth:
+  appVersion: 1.0.0
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 8080
+  tomcat:
+    accesslog:
+      rotate: true
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/data/openapi-trace/openapi-gateway"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true

@@ -1,0 +1,142 @@
+info:
+  app:
+    name: openapi-extention
+    version: 1.0.0
+    description:  openapi-extention
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health,prometheus
+    
+spring:
+  profiles:
+    active: prod
+---
+spring:
+  profile: prod
+  pid:
+    file: /openapi-extention/run/openapi-extention.pid
+  application:
+    name: openapi-extention
+  zipkin:
+    baseUrl: http://${ZIPKIN_SERVER}:${ZIPKIN_PORT}
+  sleuth:
+    sampler:
+      probability: 1.0
+auth:
+  authServer: "http://${AUTH_SERVER}:${AUTH_PORT}/v1/auth/basic/validate"
+  appVersion: ${APPLICATION_VERSION}
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+logging:
+  config: classpath:logback-prod.xml
+log:
+  file:
+    path: "/openapi-extention/logs"
+server:
+  port: 8080
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/openapi-extention"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+---
+spring:
+  profile: local
+  pid:
+    file: C://dev/work/openapi-extention/run/openapi-extention.pid
+  application:
+    name: openapi-extention
+  zipkin:
+    baseUrl: http://10.10.50.2:9411
+  sleuth:
+    sampler:
+      probability: 1.0
+logging:
+  config: classpath:logback-local.xml
+log:
+  file:
+    path: "C://dev/work/openapi-extention/logs"
+
+auth:
+  appVersion: 1.0.0
+  authServer: "http://10.10.50.2:28082/v2/auth/extention/validate"  
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 28085
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "C://dev/work/openapi-extention"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+---
+spring:
+  profile: mac
+  pid:
+    file: /tmp/openapi-extention/run/openapi-extention.pid
+  application:
+    name: openapi-extention
+  zipkin:
+    baseUrl: http://10.10.50.2:9411
+  sleuth:
+    sampler:
+      probability: 1.0
+logging:
+  config: classpath:logback-mac.xml
+log:
+  file:
+    path: "/tmp/openapi-extention/logs"
+
+auth:
+  appVersion: 1.0.0
+  authServer: "http://10.10.50.2:28082/v2/auth/extention/validate"  
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+server:
+  port: 28085
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/tmp/openapi-extention"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+      

@@ -1,0 +1,57 @@
+info:
+  app:
+    name: openapi-extention
+    version: 1.0.0
+    description:  openapi-extention
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health,prometheus
+
+spring:
+  profiles:
+    active: prod
+---
+spring:
+  profile: prod
+  pid:
+    file: /data/openapi-trace/openapi-extention/run/openapi-extention.pid
+  application:
+    name: openapi-extention
+
+auth:
+  appVersion: 1.0.0
+  authServer: "http://10.10.50.112:8081/v1/auth/basic/validate"
+rest:
+  connectionTimeout: 10000
+  readTimeout: 10000
+
+logging:
+  config: file:/data/openapi-trace/openapi-extention/logback-prod.xml
+log:
+  file:
+    path: "/data/openapi-trace/openapi-extention/logs"
+server:
+  port: 8084
+  tomcat:
+    accesslog:
+      rotate: true
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/data/openapi-trace/openapi-extention"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true

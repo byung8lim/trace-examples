@@ -1,0 +1,14 @@
+-Xms256m
+-Xmx256m
+
+11-13:-XX:+UseConcMarkSweepGC
+11-13:-XX:CMSInitiatingOccupancyFraction=75
+11-13:-XX:+UseCMSInitiatingOccupancyOnly
+-Djava.awt.headless=true
+-Dfile.encoding=UTF-8
+-Djruby.compile.invokedynamic=true
+-XX:+HeapDumpOnOutOfMemoryError
+-Djava.security.egd=file:/dev/urandom
+-Dlog4j2.isThreadContextMapInheritable=true
+-Dlogstash.jackson.stream-read-constraints.max-string-length=200000000
+-Dlogstash.jackson.stream-read-constraints.max-number-length=10000

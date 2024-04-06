@@ -1,0 +1,19 @@
+[Unit]
+Description=kfk
+After=zk.service
+
+[Service]
+Type=simple
+User=wbl
+Group=wbl
+SyslogIdentifier=kfk
+Restart=on-failure
+Environment=JAVA_HOME=/opt/jdk
+Environment="KAFKA_HEAP_OPTS=-Xmx256M -Xms256M"
+Environment=KFK_HOME=/opt/kafka
+Environment=LOG_DIR=/data/efk/kfk/logs
+ExecStart=/opt/kafka/bin/kafka-server-start.sh /data/efk/kfk/config/server.properties
+ExecStop=/opt/kafka/bin/kafka-server-stop.sh /data/efk/kfk/config/server.properties
+
+[Install]
+WantedBy=multi-user.target

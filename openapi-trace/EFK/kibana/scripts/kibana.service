@@ -1,0 +1,14 @@
+[Unit]
+Description=Kibana
+After=network-online.target elk.service
+
+[Service]
+User=wbl
+Group=wbl
+Environment="KBN_PATH_CONF=/opt/kibana/config"
+ExecStart=/opt/kibana/bin/kibana
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

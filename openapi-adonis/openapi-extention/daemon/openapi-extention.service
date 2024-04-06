@@ -1,0 +1,16 @@
+[Unit]
+Description=auth
+After=network.target
+
+[Service]
+Type=simple
+User=wbl
+Group=wbl
+SyslogIdentifier=auth
+Restart=on-failure
+Environment=JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.22.0.7-1.el7_9.x86_64
+ExecStart=/bin/bash -c "exec java -Dspring.config.location=file:/data/auth/application.yml -jar /data/auth/auth-0.0.1.jar"
+
+[Install]
+WantedBy=multi-user.target
+

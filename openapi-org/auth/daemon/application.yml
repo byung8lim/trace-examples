@@ -1,0 +1,74 @@
+info:
+  app:
+    name: auth
+    version: 0.0.1
+    description:  auth
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health,prometheus
+    
+spring:
+  profiles:
+    active: prod
+---
+spring:
+  profile: prod
+  pid:
+    file: /data/auth/run/auth.pid
+  application:
+    name: auth-server
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  datasource:
+    url: jdbc:h2:file:/data/auth/db/auth;AUTO_SERVER=true
+    driverClassName: org.h2.Driver
+    username: sa
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.H2Dialect
+      properties:
+        hibernate:
+          format_sql: true
+          show_sql: false
+auth:
+  appVersion: 1.0.0
+  seed: 1234567890123456
+
+logging:
+  config: file:/data/auth/logback-prod.xml
+log:
+  file:
+    path: "/data/auth/logs"
+server:
+  port: 8081
+  tomcat:
+    accesslog:
+      rotate: true      
+      encoding: UTF-8
+      pattern: "%h %l %u [%t] \"%m %U %H\" %s %b %D"
+      enabled: true
+    basedir: "/data/auth"
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
